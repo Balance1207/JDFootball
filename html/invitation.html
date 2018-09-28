@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>邀请函</title>
+    <link rel="stylesheet/less" href="../less/invitation.less">
+    <!-- less.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.7.1/less.min.js" ></script>
+</head>
+<body>
+    <div class="wrap">
+        <img src="../img/back_4.jpg" alt="background">
+        <p class="friendCall" id="cIndex">
+            嗨
+            <span>和我</span>
+            <span class="call"></span>
+        </p>
+        <p class="verse" id="fIndex"></p>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+    <!-- jQuery-Cookie -->
+    <script src="../js/jquery.cookie.js"></script>
+    <!-- 微信接口 -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            //获取当前链接携带参数自定义函数
+            function getUrlParams (names) {
+                //获取？后面的参数
+                var urlSearch = location.search;
+                var urlValue = "";
+                //以？*&来拆分
+                var params = urlSearch.split(/[?*&]/);
+                for(var i = 0; i < params.length; i++){
+                    //如果url参数里包含传递过来names字段，则取=后面的部分
+                    if(params[i].indexOf(names) >= 0 ){
+                        urlValue = params[i].split("=")[1];
+                        return urlValue;
+                    }
+                }
+                return urlValue;
+            }
+
+            var callID = decodeURI(getUrlParams('callID'));
+            var fID = decodeURI(getUrlParams('fID'));
+
+            //老友类别
+            var callData = [
+                '一起翘课的老同学',
+                '一起成长的老友',
+                '一起流汗的队友',
+                '一起跨年的家人',
+                '一起追剧的室友',
+                '一起潇傻的群友',
+                '一起开黑的兄弟',
+                '一起K歌的同僚',
+                '一起剁手的姐妹淘',
+                '一起吃鸡的搭档',
+                '一起吃苦的战友',
+                '一起撸串的吃货',
+                '一起浪漫的另一半'
+            ];
+            $('.call').text(callData[callID]);
+
+            //随机生成诗句
+            var verse_0 = [
+                '自古国足空余恨，不如合力捐足球！',
+                '劝君更尽一杯酒，饮罢合力捐足球！',
+                '珍重无尽相思意，不如合力捐足球！',
+                '桃花潭水深千尺，不及合力捐足球！',
+                '莫愁前路无知己，与我合力捐足球！',
+                '借问酒家何处有，喝完一起捐足球！',
+                '凤凰台上凤凰游，吃完烧烤捐足球！',
+                '只愿君心似我心，捐个足球瘦两斤！',
+                '遥知兄弟登高处，插完茱萸捐足球！',
+                '举头望明月念你，低头掏钱包捐球！',
+                '晴空一鹤排云上，又是一年公益时！',
+                '故人相望若为情，随我一起把球捐！',
+                '芳草有情皆碍马，艾玛你还不捐球？',
+                '同是天涯沦落人，勒紧裤带捐球去！',
+                '故人别来三五春，再见该是捐球时！',
+                '世人结交须黄金，你我老铁捐足球！',
+                '竹边荷外再相逢，何不携手把球捐！',
+                '南去北来徒自老，再忆青春把球捐。',
+                '落花时节又逢君，不如携手捐球去。',
+                '与其大鱼与大肉，不如合力捐足球！',
+                '工薪能买几寸地，不如合力捐足球！'
+            ];
+            var verse_1 = [
+                '珍重无尽相思意，不如合力捐足球！',
+                '桃花潭水深千尺，不及合力捐足球！',
+                '合力捐球百福至，家和人美万事兴！',
+                '别时容易见时难，捐完足球把家还！',
+                '独在异乡为异客，思亲捐球寄离愁！'
+            ];
+            var verse_2 = [
+                '珍重无尽相思意，不如合力捐足球。',
+                '在天愿作比翼鸟，举案齐眉把球捐。',
+                '举头望明月念你，低头掏钱包捐球。',
+                '人生自是有情痴，与卿共入足球梦。',
+                '与君牵手把球捐，愿作鸳鸯不羡仙。'
+            ];
+
+            // 根据好友类别选择诗句
+            switch (fID) {
+                case 0:
+                    var index = Math.floor(Math.random() * verse_0.length);
+                    console.log(index, 'index')
+                    $('.verse').text(verse_0[index]);
+                    $('.verse').attr('id',index);
+                    break;
+                case 1:
+                    var index = Math.floor(Math.random() * verse_1.length);
+                    $('.verse').text(verse_1[index]);
+                    $('.verse').attr('id',index);
+                    break;
+                default:
+                    var index = Math.floor(Math.random() * verse_2.length);
+                    $('.verse').text(verse_2[index]);
+                    $('.verse').attr('id',index);
+            }
+
+            // 获取关键字改变颜色样式
+            // var arr = ['的', '把球捐', '，', '足球梦', '捐球',
+            //     '捐足球', '足球梦', '公益时',
+            //     '捐个足球', '合力捐球', '捐完足球'];
+            // var test = Math.floor(Math.random() * arr.length);
+            // var text = arr[test];
+            var text = '的';
+            var text1 = '把球捐';
+            var text2 = '，';
+            var text3 = '足球梦';
+            var text4 = '捐球';
+            var text5 = '捐足球';
+            var text6 = '足球梦';
+            var text7 = '公益时';
+            var text8 = '捐个足球';
+            var text9 = '合力捐球';
+            var text10 = '捐完足球';
+            var regExp = new RegExp(text, "g");
+            var regExp1 = new RegExp(text1, "g");
+            var regExp2 = new RegExp(text2, "g");
+            var regExp3 = new RegExp(text3, "g");
+            var regExp4 = new RegExp(text4, "g");
+            var regExp5 = new RegExp(text5, "g");
+            var regExp6 = new RegExp(text6, "g");
+            var regExp7 = new RegExp(text7, "g");
+            var regExp8 = new RegExp(text8, "g");
+            var regExp9 = new RegExp(text9, "g");
+            var regExp10 = new RegExp(text10, "g");
+
+            $(".call").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp, "<span style='color:#3fbfb4' >"+text+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp2, text2+"</br>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp1, "<span style='color:#d44183' >"+text1+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp3, "<span style='color:#d44183' >"+text3+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp4, "<span style='color:#d44183' >"+text4+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp5, "<span style='color:#d44183' >"+text5+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp6, "<span style='color:#d44183' >"+text6+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp7, "<span style='color:#d44183' >"+text7+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp8, "<span style='color:#d44183' >"+text8+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp9, "<span style='color:#d44183' >"+text9+"</span>");
+                $(this).html(newHtml);
+            });
+            $(".verse").each(function()//遍历p类里的文字；
+            {
+                var html = $(this).html();
+                var newHtml = html.replace(regExp10, "<span style='color:#d44183' >"+text10+"</span>");
+                $(this).html(newHtml);
+            });
+
+            //分享
+            var localUrl = window.location.href.split('#')[0];
+            localUrl = encodeURIComponent(localUrl);
+
+            $.ajax({
+                url : 'https://api.moko.site/v1/Stat/createSignature?url='+localUrl,
+                type : "get",
+                dataType : 'json',
+                success : function(data) {
+                    // console.log(data.data);
+                    wx.config({
+                        debug: false,
+                        appId: data.data.appId,
+                        timestamp: data.data.timestamp,
+                        nonceStr: data.data.noncestr,
+                        signature: data.data.signature,
+                        jsApiList: [
+                            'onMenuShareAppMessage',
+                            'onMenuShareTimeline'
+                        ]
+                    });
+
+                    wx.ready(function () {
+                        var shareData = {
+                            title: '寻找十一人',
+                            desc: '老友邀你一起寻找中国十一人，支持青少年足球筑梦计划！',
+                            link: 'https://oxjd.lingshanfoundation.org/main/accept.html?callID='+callID+'&verseID='+$('.verse').attr('id')+'&fID='+fID,
+                            imgUrl: 'https://wx2.sinaimg.cn/mw690/aa3e126egy1fv48vcgs70j20b00bcglt.jpg',
+                            success: function () {
+                                // alert('分享成功');
+                            },
+                            cancel: function () {
+                                // alert('取消分享');
+                            }
+                        };
+                        //分享到朋友
+                        wx.onMenuShareAppMessage(shareData);
+
+                        //分享朋友圈
+                        wx.onMenuShareTimeline(shareData);
+                    });
+                },
+                error: function () {
+                    alert('二次错误')
+                }
+            });
+        })
+    </script>
+</body>
+</html>

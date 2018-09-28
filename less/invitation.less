@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+@font-face {
+  font-family: WenYue-XinQingNianTi-NC-W8;
+  src: url("../fonts/WenYue-XinQingNianTi-NC-W8.otf");
+}
+
+p {
+  font-family: WenYue-XinQingNianTi-NC-W8;
+}
+
+.wrap {
+  position: relative;
+  font-size: 0;
+  & > img {
+    width: 100%;
+  }
+  .friendCall {
+    position: absolute;
+    top: 32%;
+    width: 100%;
+    text-align: center;
+    font-size: 3.2rem;
+    color: #aebf3f;
+    span {
+      color: #3fbfb4;;
+    }
+    .call {
+      color: #5f64c5;
+    }
+  }
+  .verse {
+    position: absolute;
+    top: 44%;
+    width: 100%;
+    font-size: 3.6rem;
+    text-align: center;
+    color: #092220;
+  }
+}

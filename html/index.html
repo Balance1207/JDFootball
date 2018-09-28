@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link rel="stylesheet/less" href="../less/index.less">
+    <!-- less.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.7.1/less.min.js" ></script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="wrap-top">
+            <img src="../img/logo_1_a.png" alt="football">
+        </div>
+        <ul class="verticalLine">
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="videoBox">
+            <iframe style="width: 100%;height: 100%;" src="https://v.qq.com/iframe/player.html?vid=z07836nx3n8" allowfullscreen="" frameborder="0" class="video"></iframe>
+        </div>
+        <div class="itemIntroduction">
+            <img src="../img/logo_2.png" alt="introduce">
+        </div>
+        <div class="item-content">
+            <p>有一种青春，叫集体回忆。好久不见的老友，似乎联系都需要一个理由。在这个夏天的尾巴，趁世界杯热度还未散尽，让我们以爱的名义一起，送远方的孩子一个小小的足球，以此为起点搭建他们的足球梦。相信那些年，我们一起执念的中国足球梦，早已牵着我们的青春，走在路上。</p>
+            <p>寻找十一人——新疆偏远小学足球捐赠项目”由牛津大学中国留学生发起，通过京东公益凝聚更多力量一起为新疆全疆百所偏远地区的中小学募捐足球10000个。点击足球链接后便可跳转京东公益页面，您所捐赠的善款将直接在京东公益平台下单指定爱心足球，由京东物流将足球送往指定的远疆小学，并在新疆教育厅的监督下由快递员直接将足球交到孩子手中。相信这种便捷，简单，透明，可追踪的捐赠模式能让每一分善款落到实处，也希望这种方式能助力更多孩子实现他们的足球梦，中国的足球梦。</p>
+        </div>
+        <div class="relayTime">
+            <img src="../img/logo_3.png" alt="relayLogo">
+        </div>
+        <div class="relayContent">
+            <ul class="friendsData"></ul>
+        </div>
+        <hr>
+        <div class="footballNet">
+            <img src="../img/logo_4.png" alt="">
+        </div>
+        <div class="footballNum">
+            <ul class="footballNum-top">
+                <li>
+                    <img src="../img/logo_8.png" alt="">
+                </li>
+                <li>
+                    <img src="../img/logo_7.png" alt="">
+                </li>
+            </ul>
+            <ul class="footballNum-middle">
+                <li class="numberFont numTotal">999</li>
+                <li class="numberFont personTotal">999</li>
+            </ul>
+            <ul class="footballNum-bottom">
+                <li>
+                    <img src="../img/logo_9.png" alt="">
+                </li>
+                <li class="numberFont helpNumber">1000</li>
+            </ul>
+        </div>
+        <hr>
+        <div class="wrap-bottom">
+            <p class="thankWord">特别鸣谢（排名不分前后）：</p>
+            <ul class="companyLogo">
+                <li>
+                    <img src="../img/logo_12.png" alt="companyLogo1">
+                </li>
+                <li>
+                    <img src="../img/logo_13.png" alt="companyLogo2">
+                </li>
+                <li>
+                    <img src="../img/logo_14.png" alt="companyLogo3">
+                </li>
+            </ul>
+            <ul class="companyLogo">
+                <li>
+                    <img class="luobo" src="../img/logo_11.png" alt="companyLogo4">
+                </li>
+            </ul>
+        </div>
+        <ul class="btn">
+            <li onclick="giveFootball()">我要送球</li>
+            <li onclick="inviteFriends()">邀请老友</li>
+        </ul>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+    <!-- jQuery-cookie -->
+    <script src="../js/jquery.cookie.js"></script>
+    <!-- 微信接口 -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        //点击我要送球，跳转京东页面
+        function giveFootball() {
+            window.open("http://gongyi.m.jd.com/oneDetails.html?id=636")
+        }
+
+        //点击邀请好友
+        function inviteFriends() {
+            window.location.href = ('myInvitation.html');
+        }
+
+        $(document).ready(function () {
+            //获取当前链接携带参数自定义函数
+            function getUrlParams(names) {
+                // 获取？后面的参数
+                var urlSearch = location.search;
+                var urlValue = '';
+                // 以?*&来拆分
+                var params = urlSearch.split(/[?*&]/);
+                // console.log(params, 'params')
+
+                for (var i = 0; i < params.length; i++) {
+                    // 如果url参数里包含传递快来的names字段，则取=后面的部分
+                    if (params[i].indexOf(names) >= 0) {
+                        urlValue = params[i].split('=')[1];
+                        return urlValue
+                    }
+                }
+                return urlValue;
+            }
+
+            //获取用户id 昵称
+            var uid = decodeURI(getUrlParams('uid'));
+            var username = decodeURI(getUrlParams('nickname'));
+
+            // cookie存储uid, username
+            $.cookie('id', uid, {path: '/'});
+            $.cookie('username', username, {path: '/'})
+
+            // 京东接口
+            $.ajax({
+                type: 'GET',
+                url: 'https://gy-api.jd.com/activity/getActInfoByActId?actId=636',
+                dataType: 'jsonp',
+                success: function (res) {
+                    const data = res.data
+                    // 足球数
+                    $('.numTotal').text(parseInt(data.totalMoney/33) + 1500);
+                    // 人数
+                    $('.personTotal').text(data.userPinTotal);
+                    // 助力足球数
+                    $('.helpNumber').text(parseInt(data.totalMoney/33) + 1501);
+                },
+                error: function (res) {
+                    // console.log(res)
+                }
+            })
+
+            //老友接力时刻
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.moko.site/v1/Stat/getLastInviteRecord',
+                dataType: 'json',
+                success: function (res) {
+                    if (res && res.code == 0 && res.msg == 'ok') {
+                        const data = res.data
+                        // console.log(data, 'data')
+                        $.each(data, function (index, item) {
+                            var friendList = `<li>
+                                                <span>${item.inviter_nickname}</span>
+                                                邀请了
+                                                <span>${item.nickname}</span>
+                                                爱心接力
+                                            </li>`
+                            $('.friendsData').append(friendList)
+                        })
+
+                        //邀请老友信息滚动
+                        var marginTop = 0;
+                        setInterval(function(){
+                            $(".friendsData li:first").animate({marginTop: marginTop--},10,function(){
+                                if(!($(this).is(":animated"))) {    //判断是否有一个动画节点
+                                    if ((-marginTop) >= $(this).height()) {  //判断移出位置是否超过高度
+                                        $(this).css("margin", "0");
+                                        $(this).appendTo($(".friendsData"));  //把第一个节点移到ul后面
+                                        marginTop = 0;      //重新设置移动数值
+                                    }
+                                }
+                            });
+                        }, 50);
+                    }
+                }
+            });
+
+            // 分享
+            var localUrl = location.href
+            localUrl = encodeURIComponent(localUrl);
+
+            $.ajax({
+                url : 'https://api.moko.site/v1/Stat/createSignature?url='+localUrl,
+                type : "get",
+                dataType : 'json',
+                success : function (res) {
+                    if (res && res.code == 0 && res.msg == 'ok') {
+                        const data = res.data;
+                        // console.log(data, 'data')
+                        wx.config({
+                            debug: false,
+                            appId: data.appId,
+                            timestamp: data.timestamp,
+                            nonceStr: data.noncestr,
+                            signature: data.signature,
+                            jsApiList: [
+                                'onMenuShareAppMessage',
+                                'onMenuShareTimeline'
+                            ]
+                        });
+
+                        wx.ready(function () {
+                            // 分享到朋友
+                            wx.onMenuShareAppMessage({
+                                title: '寻找十一人',
+                                desc: '老友邀你一起寻找中国十一人，支持青少年足球筑梦计划！',
+                                link: 'https://oxjd.lingshanfoundation.org?inviter='+uid,
+                                imgUrl: 'https://wx2.sinaimg.cn/mw690/aa3e126egy1fv48vcgs70j20b00bcglt.jpg',
+                                success: function () {
+                                // alert('分享成功');
+                                },
+                                cancel: function () {
+                                // alert('取消分享');
+                                }
+                            });
+
+                            //分享朋友圈
+                            wx.onMenuShareTimeline({
+                                title: '寻找十一人',
+                                desc: '老友邀你一起寻找中国十一人，支持青少年足球筑梦计划！',
+                                link: 'https://oxjd.lingshanfoundation.org?inviter='+uid,
+                                imgUrl: 'https://wx2.sinaimg.cn/mw690/aa3e126egy1fv48vcgs70j20b00bcglt.jpg',
+                                success: function () {
+                                // alert('分享成功');
+                                },
+                                cancel: function () {
+                                // alert('取消分享');
+                                }
+                            });
+                        })
+                    }
+                }
+            })
+        });
+    </script>
+</body>
+</html>

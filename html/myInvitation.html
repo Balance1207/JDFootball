@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的邀请函</title>
+    <link rel="stylesheet/less" href="../less/myInvitation.less">
+    <!-- less.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.7.1/less.min.js" ></script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="wrap-top">
+            <img src="../img/logo_1_a.png" alt="football">
+        </div>
+        <ul class="verticalLine">
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="myInvitation">
+            <img src="../img/logo_10.png" alt="myInvitation">
+        </div>
+        <ul class="friendCategory">
+            <li>
+                <img src="../img/qiuyi.png" alt="qiuyi">
+            </li>
+            <li>选择你的老友类别</li>
+            <li>
+                <img src="../img/qiuyi.png" alt="qiuyi">
+            </li>
+        </ul>
+        <div class="friendsType">
+            <input class="chooseBtn" id="" name="" placeholder="点击选择好友类别" readonly>
+            <ul class="friendCall">
+                <li value="0">一起翘课的老同学</li>
+                <li value="0">一起成长的老友</li>
+                <li value="0">一起流汗的队友</li>
+                <li value="1">一起跨年的家人</li>
+                <li value="0">一起追剧的室友</li>
+                <li value="0">一起潇傻的群友</li>
+                <li value="0">一起开黑的兄弟</li>
+                <li value="0">一起K歌的同僚</li>
+                <li value="0">一起剁手的姐妹淘</li>
+                <li value="0">一起吃鸡的搭档</li>
+                <li value="0">一起吃苦的战友</li>
+                <li value="0">一起撸串的吃货</li>
+                <li value="2">一起浪漫的另一半</li>
+            </ul>
+        </div>
+        <div class="createInvitation">
+            <button class="createBtn">生成邀请函</button>
+        </div>
+        <hr>
+        <div class="wrap-bottom">
+            <p class="thankWord">特别鸣谢（排名不分前后）：</p>
+            <ul class="companyLogo">
+                <li>
+                    <img src="../img/logo_12.png" alt="companyLogo1">
+                </li>
+                <li>
+                    <img src="../img/logo_13.png" alt="companyLogo2">
+                </li>
+                <li>
+                    <img src="../img/logo_14.png" alt="companyLogo3">
+                </li>
+            </ul>
+            <ul class="companyLogo">
+                <li>
+                    <img class="luobo" src="../img/logo_11.png" alt="companyLogo4">
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+    <!-- jQuery-Cookie -->
+    <script src="../js/jquery.cookie.js"></script>
+    <!-- 微信接口 -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // 打印uid和nickname
+            // console.log($.cookie('id')+$.cookie('username'));
+
+            // 获取好友类别
+            $('.chooseBtn').click(function () {
+                $('.friendCall').toggle();
+
+                // 选择好友类别
+                $('.friendCall li').each(function (index, item) {
+                    $(this).click(function () {
+                        // console.log(index, 'index')
+                        $('.chooseBtn').val($(this).text());
+                        $('.chooseBtn').attr('name',$(this).attr('value'));
+                        $('.chooseBtn').attr('id',index);
+                        $(this).parent().hide();
+                    })
+                })
+            });
+
+            //点击生成邀请函按钮
+            $('.createBtn').click(function () {
+                if ($('.chooseBtn').val() == '') {
+                    alert('请选择好友类别')
+                } else {
+                    window.location.href = ('invitation.html?callID='+$('.chooseBtn').attr('id')+'&fID='+$('.chooseBtn').attr('name'));
+                }
+            });
+
+            // 分享
+            var localUrl = location.href
+            localUrl = encodeURIComponent(localUrl);
+
+            $.ajax({
+                url : 'https://api.moko.site/v1/Stat/createSignature?url='+localUrl,
+                type : "get",
+                dataType : 'json',
+                success : function (res) {
+                    if (res && res.code == 0 && res.msg == 'ok') {
+                        const data = res.data;
+                        // console.log(data, 'data')
+                        wx.config({
+                            debug: false,
+                            appId: data.appId,
+                            timestamp: data.timestamp,
+                            nonceStr: data.noncestr,
+                            signature: data.signature,
+                            jsApiList: [
+                                'onMenuShareAppMessage',
+                                'onMenuShareTimeline'
+                            ]
+                        });
+
+                        wx.ready(function () {
+                            // 分享到朋友
+                            wx.onMenuShareAppMessage({
+                                title: '寻找十一人',
+                                desc: '老友邀你一起寻找中国十一人，支持青少年足球筑梦计划！',
+                                link: 'https://oxjd.lingshanfoundation.org?inviter='+uid,
+                                imgUrl: 'https://wx2.sinaimg.cn/mw690/aa3e126egy1fv48vcgs70j20b00bcglt.jpg',
+                                success: function () {
+                                    // alert('分享成功');
+                                },
+                                cancel: function () {
+                                    // alert('取消分享');
+                                }
+                            });
+
+                            //分享朋友圈
+                            wx.onMenuShareTimeline({
+                                title: '寻找十一人',
+                                desc: '老友邀你一起寻找中国十一人，支持青少年足球筑梦计划！',
+                                link: 'https://oxjd.lingshanfoundation.org?inviter='+uid,
+                                imgUrl: 'https://wx2.sinaimg.cn/mw690/aa3e126egy1fv48vcgs70j20b00bcglt.jpg',
+                                success: function () {
+                                    // alert('分享成功');
+                                },
+                                cancel: function () {
+                                    // alert('取消分享');
+                                }
+                            });
+                        })
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+</html>
